@@ -30,3 +30,6 @@ __pycache__/
 
 # Generated report may contain real AWS resource IDs
 output/report.md
+
+# Generated report may contain real AWS resource IDs
+output/report.md
