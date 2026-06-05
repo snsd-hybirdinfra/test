@@ -27,3 +27,6 @@ output/*.json
 # Python cache
 __pycache__/
 *.pyc
+
+# Generated report may contain real AWS resource IDs
+output/report.md

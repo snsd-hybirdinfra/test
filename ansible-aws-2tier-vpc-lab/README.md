@@ -379,3 +379,28 @@ The report includes:
 - Cleanup command
 - Future extension candidates
 
+
+---
+
+## 14. Sanitized Example Output Generation
+
+Generated output files may contain real AWS resource IDs, public IPs, private IPs, ALB DNS names, and target group ARNs.
+
+For GitHub upload, sanitized example output files can be generated with:
+
+    ansible-playbook 10_generate_examples.yml
+
+This creates example files under:
+
+    output/example/
+
+Generated example files:
+
+    output/example/base_network.example.yml
+    output/example/security_groups.example.yml
+    output/example/compute.example.yml
+    output/example/alb.example.yml
+    output/example/validation.example.yml
+
+These files show the expected output structure without exposing real AWS resource values.
+

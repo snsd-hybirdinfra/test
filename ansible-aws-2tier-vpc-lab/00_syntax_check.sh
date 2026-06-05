@@ -15,7 +15,8 @@ for PLAYBOOK in \
   05_validate.yml \
   06_generate_inventory.yml \
   07_check_web_servers.yml \
-  08_generate_report.yml
+  08_generate_report.yml \
+  10_generate_examples.yml
 do
   echo ""
   echo "[CHECK] $PLAYBOOK"

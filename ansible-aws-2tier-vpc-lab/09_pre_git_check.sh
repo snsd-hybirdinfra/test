@@ -21,6 +21,8 @@ REQUIRED_FILES=(
   "06_generate_inventory.yml"
   "07_check_web_servers.yml"
   "08_generate_report.yml"
+  "09_pre_git_check.sh"
+  "10_generate_examples.yml"
   "99_delete_all.sh"
   "README.md"
   ".gitignore"
@@ -55,9 +57,18 @@ done
 echo ""
 echo "[3] Check generated output files"
 
-for FILE in output/base_network.yml output/security_groups.yml output/compute.yml output/alb.yml output/validation.yml; do
+GENERATED_OUTPUT_FILES=(
+  "output/base_network.yml"
+  "output/security_groups.yml"
+  "output/compute.yml"
+  "output/alb.yml"
+  "output/validation.yml"
+  "output/report.md"
+)
+
+for FILE in "${GENERATED_OUTPUT_FILES[@]}"; do
   if [ -f "$FILE" ]; then
-    echo "WARNING: $FILE exists. It should be ignored by Git."
+    echo "WARNING: $FILE exists. It should be ignored or reviewed before Git commit."
   else
     echo "OK: $FILE not found"
   fi
@@ -84,14 +95,28 @@ for FILE in "${EXAMPLE_FILES[@]}"; do
 done
 
 echo ""
-echo "[5] Check git ignored files"
+echo "[5] Check git ignore rules"
 
-if command -v git >/dev/null 2>&1; then
+if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   git check-ignore ansible-jjh-key >/dev/null 2>&1 && echo "OK: ansible-jjh-key ignored" || echo "WARNING: ansible-jjh-key not ignored"
+  git check-ignore ansible-jjh-key.pub >/dev/null 2>&1 && echo "OK: ansible-jjh-key.pub ignored" || echo "WARNING: ansible-jjh-key.pub not ignored"
   git check-ignore inventory.ini >/dev/null 2>&1 && echo "OK: inventory.ini ignored" || echo "WARNING: inventory.ini not ignored"
   git check-ignore output/base_network.yml >/dev/null 2>&1 && echo "OK: output/base_network.yml ignored" || echo "WARNING: output/base_network.yml not ignored"
+  git check-ignore output/security_groups.yml >/dev/null 2>&1 && echo "OK: output/security_groups.yml ignored" || echo "WARNING: output/security_groups.yml not ignored"
+  git check-ignore output/compute.yml >/dev/null 2>&1 && echo "OK: output/compute.yml ignored" || echo "WARNING: output/compute.yml not ignored"
+  git check-ignore output/alb.yml >/dev/null 2>&1 && echo "OK: output/alb.yml ignored" || echo "WARNING: output/alb.yml not ignored"
+  git check-ignore output/validation.yml >/dev/null 2>&1 && echo "OK: output/validation.yml ignored" || echo "WARNING: output/validation.yml not ignored"
 else
-  echo "SKIP: git command not found"
+  echo "SKIP: not inside a git repository"
+fi
+
+echo ""
+echo "[6] Show current git status"
+
+if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  git status --short
+else
+  echo "SKIP: not inside a git repository"
 fi
 
 echo ""
